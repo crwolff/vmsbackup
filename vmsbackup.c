@@ -197,6 +197,7 @@
 #include <limits.h>
 #include <stdlib.h>
 #include <string.h>
+#include <strings.h>
 #include <time.h>
 
 #include <sys/types.h>
@@ -432,6 +433,13 @@ unsigned long nblocks;
 #endif
 
 int fd;  /* tape file descriptor */
+
+/* Nonzero if we are reading from a saveset on disk (as
+   created by the /SAVE_SET qualifier to BACKUP) rather than from
+   a tape.
+   The value 2 indicates the disk file is in SIMH format
+*/
+int ondisk = 0;
 
 /* Entirely weird, but some savesets have several summary records.
 *  These seem to entirely replicate the contents of the tape; it
@@ -2407,6 +2415,42 @@ process_block(unsigned char *block, int file_blocksize)
  }
 
 
+/* Helper function to make a SIMH file act like tape drive */
+ssize_t
+mt_read(int fd, void *buf, size_t count)
+{
+    char sbuf[4];
+    unsigned int beg_size, act_size, end_size;
+
+    if ( ondisk == 2 ) {
+	if ( read(fd, sbuf, 4) != 4) {
+	    fprintf(stderr, "No data when reading block beginning size");
+	    return 0;
+	}
+	beg_size = getu32(sbuf);
+	if ( beg_size == 0 )	// tape mark
+	    return 0;
+	beg_size &= 0xFFFFFFF;
+	if (beg_size > count) {
+	    fprintf(stderr, "Trying to read too much data");
+	    return 0;
+	}
+	act_size = read(fd, buf, beg_size);
+	if ( read(fd, sbuf, 4) != 4) {
+	    fprintf(stderr, "No data when reading block end size");
+	    return 0;
+	}
+	end_size = getu32(sbuf) & 0xFFFFFFF;
+	if (( beg_size != act_size ) || ( beg_size != end_size )) {
+	    fprintf(stderr, "Sizes don't match");
+            return 0;
+	}
+	return act_size;
+    } else {
+        return read(fd, buf, count);
+    }
+}
+
 /* Read the VMS header records. */
 int
 rdhead(unsigned char *block, int *rec_blocksize)
@@ -2424,7 +2468,7 @@ rdhead(unsigned char *block, int *rec_blocksize)
 
 
       /* Read the tape label - 4 records of 80 bytes. */
-    while ((i = read(fd, label, LABEL_SIZE)) != 0) {
+    while ((i = mt_read(fd, label, LABEL_SIZE)) != 0) {
 
        if (i != LABEL_SIZE) {
           fprintf(stderr, 
@@ -2525,7 +2569,7 @@ rdtail()
     char name[80];
 
      /* Read the tape label - 4 records of 80 bytes. */
-    while ((i = read(fd, label, LABEL_SIZE)) != 0) {
+    while ((i = mt_read(fd, label, LABEL_SIZE)) != 0) {
        if (i != LABEL_SIZE) {
           fprintf(stderr, 
                   "Snark: bad tail label record - Expected: %d bytes found: %d\n",
@@ -2559,12 +2603,6 @@ vmsbackup()
     int status;
 
     unsigned char *block;
-
-     /* Nonzero if we are reading from a saveset on disk (as
-        created by the /SAVE_SET qualifier to BACKUP) rather than from
-         a tape. 
-     */
-    int ondisk = 0;
 
     if (tapefile == NULL) {
        tapefile = def_tapefile;
@@ -2633,6 +2671,12 @@ vmsbackup()
     ondisk = 1;
 #endif
 
+    if (ondisk) {
+       char *dotloc = strrchr( tapefile, '.' );
+       if (( dotloc != NULL ) && ( strcasecmp( dotloc, ".tap" ) == 0 ))
+	   ondisk = 2;
+    }
+
      /* process_block wants this to match the size which
          backup writes into the header.  Should it care in
          the ondisk case? 
@@ -2648,7 +2692,7 @@ vmsbackup()
     }
 
 #if HAVE_MT_IOCTLS
-    if (ondisk) {
+    if (ondisk == 1) {
 
        eoffl = 0;
 
@@ -2658,21 +2702,23 @@ vmsbackup()
        eoffl = rdhead(block, &blocksize);
 
          /* Skip over the Tape Mark (TM) after the header records. */
-       op.mt_op    = MTFSF;
-       op.mt_count = 1;
+       if ( ondisk != 2 ) {
+          op.mt_op    = MTFSF;
+          op.mt_count = 1;
 
-       printf("Skipping EOF with ioctl MTFSF!\n");
-       i = ioctl(fd, MTIOCTOP, &op);
+          printf("Skipping EOF with ioctl MTFSF!\n");
+          i = ioctl(fd, MTIOCTOP, &op);
 
-       if (i < 0) {
-	   // Error skipping first TM.
-          printf("Error skipping EOF - status:%d ", i);
-          fflush (stdout);
+          if (i < 0) {
+	      // Error skipping first TM.
+             printf("Error skipping EOF - status:%d ", i);
+             fflush (stdout);
 
-          perror(tapefile);
+             perror(tapefile);
 
-           // Exit on error.
-          exit(1);
+              // Exit on error.
+             exit(1);
+	  }
        }
     }
 #else
@@ -2688,7 +2734,7 @@ vmsbackup()
         // Find the selected VMS backup saveset. 
        if (sflag && setnr != selset) {
 
-          if (ondisk) {
+          if (ondisk == 1) {
              fprintf(stderr, "-s not supported for disk savesets\n");
              fflush (stdout);
 
@@ -2697,19 +2743,21 @@ vmsbackup()
           }
 
 #if HAVE_MT_IOCTLS
-          op.mt_op    = MTFSF;
-          op.mt_count = 1;
+	  if (ondisk != 2) {
+             op.mt_op    = MTFSF;
+             op.mt_count = 1;
 
-          printf("Skipping EOF with ioctl MTFSF!\n");
+             printf("Skipping EOF with ioctl MTFSF!\n");
 
-          i = ioctl(fd, MTIOCTOP, &op);
-          if (i < 0) {
-             fflush (stdout);
-             perror(tapefile);
+             i = ioctl(fd, MTIOCTOP, &op);
+             if (i < 0) {
+                fflush (stdout);
+                perror(tapefile);
 
-	      // Exit on error.
-             exit(1);
-          }
+	         // Exit on error.
+                exit(1);
+             }
+	  }
 #else
           abort ();
 #endif
@@ -2718,14 +2766,14 @@ vmsbackup()
        } else {
 
            // Process the current saveset.
-          i = read(fd, block, blocksize);
+          i = mt_read(fd, block, blocksize);
 
        } // Find the selected VMS backup saveset. 
 
        /* Retry read upto MAX_RETRYS before giving up. */
        if (i == -1) {
 	 for (n = 0; n < MAX_RETRYS; n++) {
-             i = read(fd, block, blocksize);
+             i = mt_read(fd, block, blocksize);
              if (i != -1) {
 	       n = MAX_RETRYS;
 	     }
@@ -2734,7 +2782,7 @@ vmsbackup()
 
         // Check the saveset block record.
        if (i == 0) {
-          if (ondisk) {
+          if (ondisk == 1) {
               /* No need to support multiple save sets.  */
              eoffl = 1;
 
@@ -2792,7 +2840,7 @@ vmsbackup()
 
     if (vflag || tflag) {
 
-       if (ondisk) {
+       if (ondisk == 1) {
           printf ("\nTotal of %u files, %lu blocks\n", nfiles, nblocks);
           printf("End of save set\n");
 
