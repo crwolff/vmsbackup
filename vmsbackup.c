@@ -2215,7 +2215,7 @@ process_block(unsigned char *block, int file_blocksize)
 	   unsigned long bnumber;
        char *copsys, *csubsys, *capplic;
        bnumber = getu32 (block_header->bbh_dol_l_number);
-       fprintf(stderr, "\nblock header\n file offset   = 0x%x\n size          = %d\n",
+       fprintf(stderr, "\nblock header\n file offset   = 0x%lx\n size          = %d\n",
     		   (bnumber-1)*bsize, (int) bsize);
        bopsys = getu16 (block_header->bbh_dol_w_opsys);
        switch (bopsys) {
@@ -2248,7 +2248,7 @@ process_block(unsigned char *block, int file_blocksize)
        }
        fprintf(stderr, " opsys         = %d (%s)\n subsys        = %d (%s)\n applic        = %d (%s)\n",
     		   bopsys, copsys, bsubsys, csubsys, bapplic, capplic);
-       fprintf(stderr, " number        = %d\n", bnumber);
+       fprintf(stderr, " number        = %ld\n", bnumber);
     }
     /* skip an XORBLOCK */
     if (bapplic==BACKUP$K_XORBLOCK)
