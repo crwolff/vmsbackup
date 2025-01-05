@@ -30,7 +30,7 @@ char *progname;
 	fprintf (stderr, "Usage:  %s [OPTION]... [FILE]...\n",
 		 progname);
         fprintf (stderr, "  Version %s\n", VersionString );
-        fprintf (stderr, "  Reads and optionally unpacks OpenVMS BACKUP savesets\n" );
+        fprintf (stderr, "  Reads and optionally unpacks OpenVMS BACKUP savesets (including TAP formatted)\n" );
 	// pad the getoptlong text switch lengths to the same for display purposes
 	fprintf(stderr, "\nMain operation mode:\n"
             HELPTEXT( "t", "list     ", "List files in saveset" )
@@ -42,6 +42,7 @@ char *progname;
             HELPTEXT( "d", "directory", "Create subdirectories" )
             HELPTEXT( "e", "extensions", "Extract all filename extensions" )
             HELPTEXT( "f", "file     ", "Read from file" )
+            HELPTEXT( "T", "tapfmt   ", "Saveset is in SimH TAP format" )
             HELPTEXT( "F", "full     ", "Full detail in listing" )	    
             HELPTEXT( "o", "output   ", "Extract to file" )
             HELPTEXT( "s", "saveset  ", "Read saveset number" )
@@ -63,6 +64,7 @@ static const struct option OptionListLong[] =
 	{"directory", 0, 0, 'd'},
 	{"extensions", 0, 0, 'e'},
 	{"file", 1, 0, 'f'},
+	{"tapfmt", 0, 0, 'T'},
 	{"output", 1, 0, 'o'},
 	{"saveset", 1, 0, 's'},
 	{"list", 0, 0, 't'},
@@ -98,17 +100,17 @@ char *argv[];
 	gargv = argv;
 	gargc = argc;
 
-	cflag=dflag=eflag=sflag=tflag=vflag=wflag=xflag=debugflags=0;
+	cflag=dflag=eflag=sflag=tflag=vflag=wflag=xflag=debugflags=tapfmt=0;
 	flag_binary = 0;
 	flag_full = 0;
 	tapefile = NULL;
 	outfile = NULL;
 
 #ifdef HAVE_GETOPTLONG
-	while((c=getopt_long(argc,argv,"b:cdef:o:s:tvwxFVBD:?",
+	while((c=getopt_long(argc,argv,"b:cdef:To:s:tvwxFVBD:?",
 		OptionListLong, &OptionIndex)) != EOF)
 #else
-	while((c=getopt(argc,argv,"b:cdef:o:s:tvwxFVBD:?")) != EOF)
+	while((c=getopt(argc,argv,"b:cdef:To:s:tvwxFVBD:?")) != EOF)
 #endif
 		switch(c){
 		case 'b':
@@ -126,6 +128,9 @@ char *argv[];
 		case 'f':
 			tapefile = optarg;
 			break;
+        case 'T':
+            tapfmt++;
+            break;
 		case 'o':
 			outfile = optarg;
 			break;

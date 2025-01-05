@@ -483,6 +483,7 @@ int wflag; // Confirm files before restoring.
 int xflag; // Extract files.
 int ehint; // Hint for using the eflag when one or more files were ignored
 int debugflags;
+int tapfmt; // Input file is in SimH TAP format
 #define D_BLKREC   0x1
 #define D_FILE     0x2
 #define D_VBN      0x4
@@ -2678,10 +2679,8 @@ vmsbackup()
     ondisk = 1;
 #endif
 
-    if (ondisk) {
-       char *dotloc = strrchr( tapefile, '.' );
-       if (( dotloc != NULL ) && ( strcasecmp( dotloc, ".tap" ) == 0 ))
-	   ondisk = 2;
+    if (ondisk && tapfmt) {
+        ondisk = 2;
     }
 
      /* process_block wants this to match the size which
