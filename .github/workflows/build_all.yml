@@ -13,6 +13,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Install ps2pdf
+        run: |
+          sudo apt update
+          sudo apt install ghostscript
+
       - name: Build
         run: |
           make 
