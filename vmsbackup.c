@@ -108,7 +108,6 @@
 //  Solaris port; added BSD code for endian-ness from nameser.h. 
 */
 
-
 /* begin included (and reworked) BSD code (from nameser.h) */
 #ifndef BYTE_ORDER
 #if ((__APPLE__) && (__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__ >= 1060))
@@ -170,6 +169,9 @@
 #if ((__APPLE__) && (__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__ >= 1060))
 # define HAVE_MT_IOCTLS 0
 #endif
+#if __WIN32__
+# define HAVE_MT_IOCTLS 0
+#endif
 #ifndef HAVE_MT_IOCTLS
 #  define HAVE_MT_IOCTLS 1
 #endif
@@ -225,6 +227,11 @@
    This is starting to sound like a bad dream.  */
 int mkdir ();
 #endif  /* __VAXC */
+
+/* Windows doesn't support permissions in mkdir */
+#ifdef __WIN32__
+# define mkdir(A, B) mkdir(A)
+#endif
 
 #include "vmsbackup.h"
 // #include "sysdep.h"
