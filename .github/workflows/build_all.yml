@@ -26,7 +26,10 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: assets
-          path: vmsbackup
+          path: |
+              vmsbackup
+              vmsbackup.pdf
+              vmsbackup.txt
           retention-days: 2
 
   BuildMing64:
@@ -45,6 +48,13 @@ jobs:
       - name: CI-Build
         run: |
           make
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: assets
+          path: vmsbackup.exe
+          retention-days: 2
 
   UpdateAssets:
     if: ${{ github.repository_owner == 'crwolff' && github.event_name == 'push' }}
