@@ -48,7 +48,7 @@ jobs:
 
   UpdateAssets:
     if: ${{ github.repository_owner == 'crwolff' && github.event_name == 'push' }}
-    needs: [BuildLinux BuildMing64]
+    needs: [BuildLinux, BuildMing64]
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout code
