@@ -40,7 +40,6 @@ jobs:
         with:
           msystem: UCRT64
           update: true
-          install: git mingw-w64-ucrt-x86_64-gcc make
           install: git mingw-w64-ucrt-x86_64-gcc msys2-runtime-devel mingw-w64-ucrt-x86_64-ghostscript groff make 
 
       - name: CI-Build
