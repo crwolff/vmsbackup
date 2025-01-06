@@ -1218,8 +1218,15 @@ process_file (unsigned char *buffer, unsigned short int rsize)
         // Get the size of the file attribute.
        dsize = (unsigned short int) getu16 (((struct bsa *)&buffer[c])->bsa_dol_w_size);
 
-        // Get the record attribute type.
-       dtype = (unsigned short int) getu16 (((struct bsa *)&buffer[c])->bsa_dol_w_type);
+       if (dsize != 0) {
+            // Get the record attribute type.
+           dtype = (unsigned short int) getu16 (((struct bsa *)&buffer[c])->bsa_dol_w_type);
+       } else {
+          if ( debugflags & D_FILE ) {
+             fprintf (stderr, "\nnull file attribute dsize; slamming the type code.\n");
+          }
+          dtype = 0;
+       }
 
        data = ((struct bsa *)&buffer[c])->bsa_dol_t_text;
 
@@ -1227,13 +1234,6 @@ process_file (unsigned char *buffer, unsigned short int rsize)
           fprintf (stderr, "\n--process_file: file attribute record debug_dump.\n");
           debug_dump(data, dsize, dtype);
        }
-
-       if ( !dsize ) {
-          if ( debugflags & D_FILE ) {
-             fprintf (stderr, "\nnull file attribute dsize; slamming the type code.\n");
-          }
-         dtype = 0;
-        }
 
         /* Record the file attributes in this record.  */
        switch (dtype) {
@@ -2554,7 +2554,6 @@ rdhead(unsigned char **block, int *rec_blocksize)
 
      // Don't reallocate block if no labels found
     if (*rec_blocksize != 0) {
-        fprintf(stderr, "Reallocating %d\n", *rec_blocksize);
          // Release the initial block buffer memory.
         if (*block != NULL) {
             free(*block);
