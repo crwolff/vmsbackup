@@ -257,7 +257,7 @@ time_t time_vms_to_unix(unsigned long long vms_time_ll);
 time_t time_vms_to_unix_asc( unsigned char *vmstime,   int vmstim_len, 
                              char *date_text, int *date_text_len );
 
-#define MAX_DATE_STR 24
+#define MAX_DATE_STR 64
 
 
 
@@ -3025,7 +3025,7 @@ time_vms_to_unix_asc( unsigned char *vmstime,   int vmstim_len,
      }
  
      unix_time = time_vms_to_unix( vms_time_ll );
-     strftime( date_text, 24, "%d-%b-%Y %H:%M:%S", localtime(&unix_time) );
+     strftime( date_text, MAX_DATE_STR, "%d-%b-%Y %H:%M:%S", localtime(&unix_time) );
 
      if (debugflags & D_TIME) {
         fprintf(stderr, "                       OpenVMS date = %s\n", date_text);
