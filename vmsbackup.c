@@ -2524,6 +2524,7 @@ rdhead(unsigned char *block, int *rec_blocksize)
 
           nfound = 0;
 
+
           sscanf(label+4, "%1s", rec_format);
           if (vflag || tflag) {
              printf("Rec format: %s\n", rec_format);
@@ -2577,6 +2578,7 @@ void
 rdtail()
  {
     int i;
+    off_t position, length;
 
     char label[LABEL_SIZE];
     char name[80];
@@ -2597,7 +2599,14 @@ rdtail()
        if (strncmp(label, "EOF1",4) == 0) {
           sscanf(label+4, "%14s", name);
           if (vflag || tflag) {
-             printf("End of saveset: %s\n\n\n",name);
+             if (ondisk == 0) {
+               printf("End of saveset: %s\n\n\n",name);
+             } else {
+               position = lseek(fd, 0, SEEK_CUR);
+               length = lseek(fd, 0, SEEK_END);
+               lseek(fd, position, SEEK_SET);
+               printf("End of saveset: %s : %ld/%ld (%0.2f%%)\n\n\n",name, position, length, 100.0*position/length);
+             }
           }
        }
     }  /* Read the tape label - 4 records of 80 bytes. */
