@@ -2438,6 +2438,11 @@ mt_read(int fd, void *buf, size_t count)
 	beg_size = getu32(sbuf);
 	if ( beg_size == 0 )	// tape mark
 	    return 0;
+    if (beg_size & 0xF0000000) {
+	    fprintf(stderr, "Unhandled TAP class number");
+	    return 0;
+	}
+
 	beg_size &= 0xFFFFFFF;
 	if (beg_size > count) {
 	    fprintf(stderr, "Trying to read too much data");
