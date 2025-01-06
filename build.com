@@ -2,7 +2,7 @@ $ write sys$output "Build procedure intended for OpenVMS testing only."
 $ write sys$output "On OpenVMS, use the (real) BACKUP and not this tool."
 $
 $
-$ VBVER = "4.4.3hb"
+$ VBVER = "4.8.0"
 $
 $ if f$locate(",D,",",''p1',") .ne. f$length(",''p1',")
 $ then
