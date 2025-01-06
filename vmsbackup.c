@@ -126,19 +126,19 @@
 #define PDP_ENDIAN      3412    /* LSB first in word, MSW first in long (pdp)*/
 
 #if defined(vax) || defined(ns32000) || defined(sun386) || defined(i386) || defined(_M_IX86) || \
-	defined(MIPSEL) || defined(_MIPSEL) || defined(BIT_ZERO_ON_RIGHT) || \
-	defined(__alpha__) || defined(__alpha) || defined(__x86_64__) || defined(_M_X64) || \
-    	(defined(__Lynx__) && defined(__x86__))
+        defined(MIPSEL) || defined(_MIPSEL) || defined(BIT_ZERO_ON_RIGHT) || \
+        defined(__alpha__) || defined(__alpha) || defined(__x86_64__) || defined(_M_X64) || \
+            (defined(__Lynx__) && defined(__x86__))
 #define BYTE_ORDER      LITTLE_ENDIAN
 #endif
 
 #if defined(sel) || defined(pyr) || defined(mc68000) || defined(sparc) || \
-	defined(is68k) || defined(tahoe) || defined(ibm032) || defined(ibm370) || \
-	defined(MIPSEB) || defined(_MIPSEB) || defined(_IBMR2) || defined(DGUX) ||\
-	defined(apollo) || defined(__convex__) || defined(_CRAY) || \
-	defined(__hppa) || defined(__hp9000) || \
-	defined(__hp9000s300) || defined(__hp9000s700) || \
-	defined (BIT_ZERO_ON_LEFT) || defined(m68k)
+        defined(is68k) || defined(tahoe) || defined(ibm032) || defined(ibm370) || \
+        defined(MIPSEB) || defined(_MIPSEB) || defined(_IBMR2) || defined(DGUX) ||\
+        defined(apollo) || defined(__convex__) || defined(_CRAY) || \
+        defined(__hppa) || defined(__hp9000) || \
+        defined(__hp9000s300) || defined(__hp9000s700) || \
+        defined (BIT_ZERO_ON_LEFT) || defined(m68k)
 #define BYTE_ORDER      BIG_ENDIAN
 #endif
 
@@ -488,7 +488,7 @@ int tapfmt; // Input file is in SimH TAP format
 #define D_FILE     0x2
 #define D_VBN      0x4
 #define D_IO       0x8
-#define D_SUM	  0x10
+#define D_SUM          0x10
 #define D_TIME    0x20
 #define D_FILE_X  0x40
 #define D_VBN_X   0x80
@@ -581,7 +581,7 @@ openfile(char *req_file_name, int struclev)
           s  = *temp_unix_filename;
           *temp_unix_filename = '\0';
 
-	   // Create an output directory if requested.
+           // Create an output directory if requested.
           if (procf && dflag) {
              mkdir(output_unix_filename, 0777);
           }
@@ -589,7 +589,7 @@ openfile(char *req_file_name, int struclev)
           *temp_unix_filename = '/';
 
           if (s == ']') {
-	      // Found the end of the directory path.
+              // Found the end of the directory path.
              break;
           }
        } 
@@ -610,7 +610,7 @@ openfile(char *req_file_name, int struclev)
     while (*temp_unix_filename && *temp_unix_filename != ';') {
 
        if( *temp_unix_filename == '.') {
-	   // Record the file name extension.
+           // Record the file name extension.
           ext = temp_unix_filename;
        }
 
@@ -635,11 +635,11 @@ openfile(char *req_file_name, int struclev)
           printf("ignoring: %s\n", filename);
        }
        if (!procf && !ehint) {
-	       ehint = 1;
-	       printf("one or more files matching the extensions list are ignored,\n"
-		      "consider using the -e/--extensions option\n");
-	       if (!vflag)
-		       printf("or the -v/--verbose option to have the ignored files listed\n");
+               ehint = 1;
+               printf("one or more files matching the extensions list are ignored,\n"
+                      "consider using the -e/--extensions option\n");
+               if (!vflag)
+                       printf("or the -v/--verbose option to have the ignored files listed\n");
        }
     }
 
@@ -658,10 +658,10 @@ openfile(char *req_file_name, int struclev)
     if(procf) {
         /* Open the file for writing. */
        if(outfile)
-	  if(0==strcmp(outfile,"-"))
-	     found_file_ftr = fdopen(STDOUT_FILENO,"w");
-	  else
-	     found_file_ftr =  fopen(outfile, "w");
+          if(0==strcmp(outfile,"-"))
+             found_file_ftr = fdopen(STDOUT_FILENO,"w");
+          else
+             found_file_ftr =  fopen(outfile, "w");
        else
           found_file_ftr =  fopen(output_unix_filename, "w");
 
@@ -760,7 +760,7 @@ typecmp(register char *str)
                 if ( foo == 0 ) /* zero is a match; ignore the file */
                      return(0);
         }
-	return 1;      /* default to include file */
+        return 1;      /* default to include file */
  }
 
 
@@ -854,44 +854,44 @@ process_summary (unsigned char *buffer, unsigned short rsize)
        if ( !dsize ) {
           if ( debugflags & D_SUM ) {
              fprintf (stderr, "\nnull dsize; slamming the record type code.\n");
- 	  }
+           }
          type = 0;
-	}
+        }
        switch (type) {
           case 0:
               /* This seems to be used for padding at the end
                   of the summary. 
               */
-	    //goto end_of_summary;
+            //goto end_of_summary;
              break;
 
           case BSA_K_SSNAME:
-	      // Store saveset name and its length. 
+              // Store saveset name and its length. 
              saveset      = (char *)text;
              saveset_size = dsize;
              break;
 
           case BSA_K_COMMAND:
-	       // Store the backup command line.
+               // Store the backup command line.
              command      = (char *)text;
              command_size = dsize;
              break;
 
 
           case BSA_K_COMMENT:
-	      // Store whatever the user included as a comment and its length.
+              // Store whatever the user included as a comment and its length.
              comment      = (char *)text;
              comment_size = dsize;
              break;
 
           case BSA_K_USERNAME:
-	      // Store the name of the user who created the backup.
+              // Store the name of the user who created the backup.
              written_by      = (char *)text;
              written_by_size = dsize;
              break;
 
           case BSA_K_USERUIC:
-  	      // Store the user's UIC.
+                // Store the user's UIC.
              if (dsize == 4) {
                 usr = getu16 (text);
                 grp = getu16 (text + 2);
@@ -899,7 +899,7 @@ process_summary (unsigned char *buffer, unsigned short rsize)
              break;
 
           case BSA_K_DATE:
-	      // Store the date the backup was made.
+              // Store the date the backup was made.
              text = ((struct bsa *)&buffer[attr_ptr])->bsa_dol_t_text; 
 
              time_vms_to_unix_asc( text, dsize, date, &date_length );
@@ -907,13 +907,13 @@ process_summary (unsigned char *buffer, unsigned short rsize)
              break;
 
           case BSA_K_OPSYS:
-	      // Store the operating system name.
+              // Store the operating system name.
              if (dsize == 2) {
                 unsigned short oscode;
 
                 oscode = getu16 (text);
 
-	         // Convert the OS code name.
+                 // Convert the OS code name.
                 switch(oscode) {
 
                    case BACKUP_K_OPSYS_IA64:
@@ -929,7 +929,7 @@ process_summary (unsigned char *buffer, unsigned short rsize)
                       break;
 
                    default:
-		     if ( debugflags & D_SUM ) {
+                     if ( debugflags & D_SUM ) {
                         fprintf(stderr, "Unknown OS Code = %d\n", oscode );
                      }
 
@@ -941,88 +941,88 @@ process_summary (unsigned char *buffer, unsigned short rsize)
              break;
 
           case BSA_K_SYSVER:
-	      // Store the operating system version.
+              // Store the operating system version.
              osversion      = (char *)text;
              osversion_size = dsize;
              break;
 
           case BSA_K_NODENAME:
-	      // Store the node name the backup was run on.
+              // Store the node name the backup was run on.
              nodename      = (char *)text;
              nodename_size = dsize;
              break;
 
           case BSA_K_SIR:
-	      // Store the CPU systems ID register.
+              // Store the CPU systems ID register.
              if (dsize >= 4) {
                 id = getu32 (text);
              }
              break;
 
           case BSA_K_DRIVEID:
-	      // Store the name of the drive used for the backup.
+              // Store the name of the drive used for the backup.
              written_on      = (char *)text;
              written_on_size = dsize;
              break;
 
           case BSA_K_BACKVER:
-	      // Store the backup utility's version number.
+              // Store the backup utility's version number.
              backup_version      = (char *)text;
              backup_version_size = dsize;
              break;
 
           case BSA_K_BLOCKSIZE:
-	      // Store the block size of the saveset.
+              // Store the block size of the saveset.
              if (dsize >= 4) {
                 blksz = getu32 (text);
              }
              break;
 
           case BSA_K_XORSIZE:
-	      // Store the size of each XOR group.
+              // Store the size of each XOR group.
              if (dsize >= 2) {
                 grpsz = getu16 (text);
              }
              break;
 
           case BSA_K_BUFFERS:
-	      // Store the number of buffers used.
+              // Store the number of buffers used.
              if (dsize >= 2) {
                 bufcnt = getu16 (text);
              }
              break;
 
           case BSA_K_VOLSETNAM:
-	      // Store the volume set name.
+              // Store the volume set name.
              vol_set_name      = (char *)text;
              vol_set_name_size = dsize;
 
-	     if (debugflags & D_SUM_X) {
+             if (debugflags & D_SUM_X) {
                 fprintf(stderr, "BSA$K_VOLSETNAM: %s dsize = %d\n",
                        vol_set_name, dsize);
              }
              break;
 
           case BSA_K_NVOLS:
-	      // Get the number of volumes in the save set.
+              // Get the number of volumes in the save set.
 
              if (dsize >= 2) {
                 num_vols = getu16 (text);
              }
 
-	     if (debugflags & D_SUM_X) {
+             if (debugflags & D_SUM_X) {
                 fprintf(stderr, "BSA$K_NVOLS: %d dsize = %d\n", num_vols, dsize);
              }
 
              break;
 
           case BSA_K_BACKSIZE:
-	      // Get the total file space in the save set.
+              // Get the total file space in the save set.
              if (dsize >= 2) {
                 backup_size = getu16 (text);
              }
 
-	     if (debugflags & D_SUM_X) {
+             if (debugflags & D_SUM_X) {
                 fprintf(stderr, "BSA$K_BACKSIZE: %d dsize = %d\n", backup_size, dsize);
              }
              break;
@@ -1030,8 +1030,8 @@ process_summary (unsigned char *buffer, unsigned short rsize)
           case BSA_K_BACKFILES:
              num_files = getu16 (text);
 
-	      // Get the number of files in the save set.
-	     if (debugflags & D_SUM_X) {
+              // Get the number of files in the save set.
+             if (debugflags & D_SUM_X) {
                 fprintf(stderr, "BSA$K_BACKFILES: dsize = %d\n", dsize);
              }
              break;
@@ -1040,7 +1040,7 @@ process_summary (unsigned char *buffer, unsigned short rsize)
               /* Silently ignore any unrecognized attribute codes,
                  allowing for future changes to BACKUP.
               */
-	     if (debugflags & D_SUM_X) {
+             if (debugflags & D_SUM_X) {
                 fprintf(stderr, "BSA Unrecognized BSA_K backup record attribute: %d, dsize = %d\n",
                        type, dsize);
              }
@@ -1143,8 +1143,8 @@ process_file (unsigned char *buffer, unsigned short int rsize)
        union {
           unsigned short protect_code;
 
-	  struct { // Breakout of file protection fields.
-	     unsigned system : 4;
+          struct { // Breakout of file protection fields.
+             unsigned system : 4;
              unsigned owner  : 4;
              unsigned group  : 4;
              unsigned world  : 4;
@@ -1163,9 +1163,9 @@ process_file (unsigned char *buffer, unsigned short int rsize)
     // Breakout of VMS record attributes of a file attribute.
     static struct vms_rec_att {
        union {
-	 unsigned char rec_attrib; // Record attributes.
+         unsigned char rec_attrib; // Record attributes.
          struct {
-	   unsigned char fortran_cc :1; // FAB$V_FTN - Fortran carriage control.
+           unsigned char fortran_cc :1; // FAB$V_FTN - Fortran carriage control.
            unsigned char cr_cc      :1; /* FAB$V_CR  - Carriage return carriage
                                                         control */
            unsigned char print_file :1; // FAB$V_PRN - Print carriage control
@@ -1242,7 +1242,7 @@ process_file (unsigned char *buffer, unsigned short int rsize)
             if ( debugflags & D_FILE_X ) {
                fprintf (stderr, "null file attribute dtype; ignoring this record.\n");
             }
- 	    break;
+             break;
 
           case BSA_K_FILENAME:
 
@@ -1258,13 +1258,13 @@ process_file (unsigned char *buffer, unsigned short int rsize)
 
              *att_filename = '\0';
 
-	     sprintf(attrib_proc, "filename (%d): %s", BSA_K_FILENAME,
+             sprintf(attrib_proc, "filename (%d): %s", BSA_K_FILENAME,
                      att_filename);
 
              break;
 
           case BSA_K_STRUCLEV:
-	      // Volume file structure level.
+              // Volume file structure level.
 
               /* In my example, two bytes, 0x1 0x2.
                  reportedly, the structure version and the structure level
@@ -1273,7 +1273,7 @@ process_file (unsigned char *buffer, unsigned short int rsize)
              struclev = (int) *(data + 1); // Major structure level.
              strucvalid = 1;
 
-	     sprintf(attrib_proc, "Struture version (%d): %d-%d", 
+             sprintf(attrib_proc, "Struture version (%d): %d-%d", 
                      BSA_K_STRUCLEV, strucver, struclev);
 
              break;
@@ -1284,7 +1284,7 @@ process_file (unsigned char *buffer, unsigned short int rsize)
              fileid1 = getu16(data);      // Primary File file number.
              fileid2 = getu16(data + 2);  // Primary File file sequence number.
              fileid3 = getu16(data + 4);  // Primary File relative volume number.
-	     sprintf(attrib_proc, "File ID (%d): %d/%d/%d", 
+             sprintf(attrib_proc, "File ID (%d): %d/%d/%d", 
                      BSA_K_FID, fileid1, fileid2, fileid3);
 
              break;
@@ -1294,7 +1294,7 @@ process_file (unsigned char *buffer, unsigned short int rsize)
               /* 4 bytes, 0x00000004. The allocation.  */
              alloc_file_size = getu32(data); 
 
-	     sprintf(attrib_proc, "Allocated file size (%d): %d", 
+             sprintf(attrib_proc, "Allocated file size (%d): %d", 
                      BSA_K_FILESIZE, (int) alloc_file_size);
 
              break;
@@ -1305,13 +1305,13 @@ process_file (unsigned char *buffer, unsigned short int rsize)
                 usr = getu16 (data);
                 grp = getu16 (data + 2);
              }
-	     sprintf(attrib_proc, "UIC (%d): user/grp = %d/%d", 
+             sprintf(attrib_proc, "UIC (%d): user/grp = %d/%d", 
                      BSA_K_UIC, usr, grp);
 
              break;
 
           case BSA_K_RECATTR:
-	     /* Record attribute fields:
+             /* Record attribute fields:
                  See:
  
                    Figure 1-4 "DSI & FAT Structures in an XAR" Guide to
@@ -1365,11 +1365,11 @@ process_file (unsigned char *buffer, unsigned short int rsize)
 
                30: Version limit for directory file FAT$W_VERSIONS - 
                     unsigned short.
-	     */
+             */
 
-	     sprintf(attrib_proc, "Record attribute %d", BSA_K_RECATTR);
+             sprintf(attrib_proc, "Record attribute %d", BSA_K_RECATTR);
 
-	     recfmt  = data[0];           // Record type.
+             recfmt  = data[0];           // Record type.
              rec_type.rec_type_word.rec_format = data[0];
 
              recatt  = data[1];           // Record attributes of current file.
@@ -1383,7 +1383,7 @@ process_file (unsigned char *buffer, unsigned short int rsize)
                  The FAT$HIBLK is an inverted format field. The high and low
                   order bits are transposed for compatibility with PDB-11
                   software.
-	      */
+              */
 
              highest_VBN_low  = getu16 (&data[4]); // Low order  alloc VBN.
              highest_VBN_high = getu16 (&data[6]); // High order alloc VBN.
@@ -1397,7 +1397,7 @@ process_file (unsigned char *buffer, unsigned short int rsize)
                  The FAT$L_EFBLK is an inverted format field. The high and low
                   order bits are transposed for compatibility with PDB-11
                   software.
-	      */
+              */
 
              eof_VBN_low  = getu16 (&data[ 8]); // Low order End of file VBN. 
              eof_VBN_high = getu16 (&data[10]); // High order End of file VBN. 
@@ -1412,15 +1412,15 @@ process_file (unsigned char *buffer, unsigned short int rsize)
 
              nblk    = eof_VBN_high + (64 * 1024) * eof_VBN_low; 
 
-	      /* First free bye in FAT$L_EFBLK - count of the number of bytes
+              /* First free bye in FAT$L_EFBLK - count of the number of bytes
                   in use in the virtual block containing the end of file - 
                   offset to the byte of the file available for appending.
-	      */ 
+              */ 
              first_free_byte =  getu16 (&data[12]);
 
               /* Bucket size - number of 512-byte blocks per 
                  bucket (0-63). 0 if not indexed or relative format file.
-	      */
+              */
              bucket_size   = data[14]; 
 
              /* Number of control bytes in the VFC record (At least 2
@@ -1445,17 +1445,17 @@ process_file (unsigned char *buffer, unsigned short int rsize)
                  Sequential - Stream-LF     32,767
                  Sequential - Indexed       16,362
                  Relative                   16,383
-	     */
+             */
              max_rec_size = getu16 (&data[16]);
 
-	      /* Number of blocks to extend a sequential file. (Used to
+              /* Number of blocks to extend a sequential file. (Used to
                  minimize file fragmentation.)
               */
              def_extend_quan = getu16 (&data[18]); 
 
-	      /* Number of global buffers for a file (0 - 32,767). Default 0.
+              /* Number of global buffers for a file (0 - 32,767). Default 0.
                  I/O buffers for 2 or more processes to access.
-	      */
+              */
              global_buf_cnt = getu16 (&data[20]); 
 
               // Default version limit. Valid only if file is a directory. 
@@ -1464,7 +1464,7 @@ process_file (unsigned char *buffer, unsigned short int rsize)
              break;
 
           case BSA_K_BACKLINK:
-	     sprintf(attrib_proc, "Back link (%d)", BSA_K_BACKLINK);
+             sprintf(attrib_proc, "Back link (%d)", BSA_K_BACKLINK);
 
               /* In my example, 6 bytes.  hex 2b3c 2000 0000.  */
              break;
@@ -1476,11 +1476,11 @@ process_file (unsigned char *buffer, unsigned short int rsize)
              protection = getu16 (&data[0]);
 
              file_protection.prot_word.protect_code = getu16 (&data[0]); 
-	     
-	     sprintf(attrib_proc, "File Protection (FPRO) (%d): s:0x%x, o:0x%x, g:0x%x, w:0x%x", 
+             
+             sprintf(attrib_proc, "File Protection (FPRO) (%d): s:0x%x, o:0x%x, g:0x%x, w:0x%x", 
                      BSA_K_FPRO, 
                      file_protection.prot_word.prot_bits.system,
-	             file_protection.prot_word.prot_bits.owner,
+                     file_protection.prot_word.prot_bits.owner,
                      file_protection.prot_word.prot_bits.group,
                      file_protection.prot_word.prot_bits.world);
 
@@ -1492,10 +1492,10 @@ process_file (unsigned char *buffer, unsigned short int rsize)
 
              rec_protection.prot_word.protect_code = getu16 (&data[0]);
 
-	     sprintf(attrib_proc, "Record protection (RPRO) (%d): s:0x%x, o:0x%x, g:0x%x, w:0x%x", 
+             sprintf(attrib_proc, "Record protection (RPRO) (%d): s:0x%x, o:0x%x, g:0x%x, w:0x%x", 
                      BSA_K_RPRO, 
                      rec_protection.prot_word.prot_bits.system,
-	             rec_protection.prot_word.prot_bits.owner,
+                     rec_protection.prot_word.prot_bits.owner,
                      rec_protection.prot_word.prot_bits.group,
                      rec_protection.prot_word.prot_bits.world);
 
@@ -1503,7 +1503,7 @@ process_file (unsigned char *buffer, unsigned short int rsize)
 
           case BSA_K_ACLEVEL:
              /* File Access Level */
-	     sprintf(attrib_proc, "ACL level (%d)", BSA_K_ACLEVEL);
+             sprintf(attrib_proc, "ACL level (%d)", BSA_K_ACLEVEL);
 
               /* In my example, 1 byte.  hex 00.  */
              break;
@@ -1511,9 +1511,9 @@ process_file (unsigned char *buffer, unsigned short int rsize)
           case BSA_K_UCHAR:
               /* File characteristics */ 
               /* In my example, 4 bytes.  hex 00 0000 00.  */
-	     file_uchar = getu32(data);
+             file_uchar = getu32(data);
 
-	     sprintf(attrib_proc, "UCHAR (%d): %d", BSA_K_UCHAR, (int) file_uchar);
+             sprintf(attrib_proc, "UCHAR (%d): %d", BSA_K_UCHAR, (int) file_uchar);
 
              break;
 
@@ -1522,25 +1522,25 @@ process_file (unsigned char *buffer, unsigned short int rsize)
               /* In my example, 2 bytes.  Hex 01 00.  */
              file_ver_limit = getu16(data);
 
-	     sprintf(attrib_proc, "Version Limit (%d): %d", 
+             sprintf(attrib_proc, "Version Limit (%d): %d", 
                      BSA_K_VERLIMIT, file_ver_limit);
 
              break;
 
           case BSA_K_JNL_FLAGS:
-	     sprintf(attrib_proc, "JNL Flags (%d)", BSA_K_JNL_FLAGS);
+             sprintf(attrib_proc, "JNL Flags (%d)", BSA_K_JNL_FLAGS);
 
               /* In my example, 1 byte.  hex 00.  */
              break;
 
           case BSA_K_RU_ACTIVE:
-	     sprintf(attrib_proc, "RU Active (%d)", BSA_K_RU_ACTIVE);
+             sprintf(attrib_proc, "RU Active (%d)", BSA_K_RU_ACTIVE);
 
               /* In my example, 1 byte.  hex 00.  */
              break;
 
           case BSA_K_HIGHWATER:
-	     sprintf(attrib_proc, "High water (%d)", BSA_K_HIGHWATER);
+             sprintf(attrib_proc, "High water (%d)", BSA_K_HIGHWATER);
              /* Highest block that has been written to the file. */
               /* In my example, 4 bytes.  05 0000 00.  */
              break;
@@ -1550,43 +1550,43 @@ process_file (unsigned char *buffer, unsigned short int rsize)
               /* In my example, 2 bytes.  04 00.  */
              reviseno = getu16 (&data[0]);
 
-	     sprintf(attrib_proc, "Revision (%d): %d", BSA_K_REVISION,
+             sprintf(attrib_proc, "Revision (%d): %d", BSA_K_REVISION,
                      reviseno);
 
              break;
 
           case BSA_K_CREDATE:
-	     sprintf(attrib_proc, "Creation date (%d)", BSA_K_CREDATE);
+             sprintf(attrib_proc, "Creation date (%d)", BSA_K_CREDATE);
 
              create_time = time_vms_to_unix_asc( data, 8, date_credat, NULL );
              break;
 
           case BSA_K_REVDATE:
-	     sprintf(attrib_proc, "Revision date (%d)", BSA_K_REVDATE);
+             sprintf(attrib_proc, "Revision date (%d)", BSA_K_REVDATE);
 
              mod_time = time_vms_to_unix_asc( data, 8, date_revdat, NULL );
              break;
 
           case BSA_K_EXPDATE:
-	     sprintf(attrib_proc, "Expiration date (%d)", BSA_K_EXPDATE);
+             sprintf(attrib_proc, "Expiration date (%d)", BSA_K_EXPDATE);
 
              time_vms_to_unix_asc( data, 8, date_expdat, NULL );
              break;
 
           case BSA_K_BAKDATE:
-	     sprintf(attrib_proc, "Backup date (%d)", BSA_K_BAKDATE);
+             sprintf(attrib_proc, "Backup date (%d)", BSA_K_BAKDATE);
 
              time_vms_to_unix_asc( data, 8, date_bakdat, NULL );
              break;
 
           case BSA_K_DIR_UIC:
-	     sprintf(attrib_proc, "Directory UIC Protection (%d)", BSA_K_DIR_UIC);
+             sprintf(attrib_proc, "Directory UIC Protection (%d)", BSA_K_DIR_UIC);
 
               /* In my example, 4 bytes.  01 00c6 00.  */
              break;
 
           case BSA_K_DIR_FPRO:
-	     sprintf(attrib_proc, "Directory FPRO (%d)", BSA_K_DIR_FPRO);
+             sprintf(attrib_proc, "Directory FPRO (%d)", BSA_K_DIR_FPRO);
 
               /* In my example, 2 bytes.  88 aa.  */
              break;
@@ -1596,7 +1596,7 @@ process_file (unsigned char *buffer, unsigned short int rsize)
               /* In my example, 2 bytes.  01 00.  */
              dir_ver_limit = getu16(data);
 
-	     sprintf(attrib_proc, "Directory version limit (%d): %d ", 
+             sprintf(attrib_proc, "Directory version limit (%d): %d ", 
                      BSA_K_VERLIMIT, dir_ver_limit);
 
              break;
@@ -1604,12 +1604,12 @@ process_file (unsigned char *buffer, unsigned short int rsize)
            /* then comes 0x0, offset 0x2b7.  */
 
           case BSA_K_RETAINMIN:
-	     sprintf(attrib_proc, "Minimum file retention (%d)", BSA_K_RETAINMIN);
+             sprintf(attrib_proc, "Minimum file retention (%d)", BSA_K_RETAINMIN);
 
              break;
 
           case BSA_K_RETAINMAX:
-	     sprintf(attrib_proc, "Maximum file retention (%d)", BSA_K_RETAINMAX);
+             sprintf(attrib_proc, "Maximum file retention (%d)", BSA_K_RETAINMAX);
 
              break;
 
@@ -1620,8 +1620,8 @@ process_file (unsigned char *buffer, unsigned short int rsize)
 
           default:
               /* unexpected or unrecognized code */
-	     if ( debugflags & D_FILE_X )
-	         sprintf(attrib_proc, 
+             if ( debugflags & D_FILE_X )
+                 sprintf(attrib_proc, 
                     "Unrecognized or unexpected BSA_K record attribute type code:  0x%x/%d\n", 
                     dtype, dtype);
 
@@ -1674,15 +1674,15 @@ process_file (unsigned char *buffer, unsigned short int rsize)
     allocated_bytes_file_size = allocated_block_file_size*VMS_BLOCK;
     if ( nblk > 0 ) {
             filesize  = (nblk-1)*VMS_BLOCK + first_free_byte;
-	    blocks    = (filesize + (VMS_BLOCK-1)) / VMS_BLOCK;
+            blocks    = (filesize + (VMS_BLOCK-1)) / VMS_BLOCK;
     } else if (allocated_bytes_file_size > 0) {
-	    // Use the allocated file size if the file size is bad. - Indexed files
-	    // use different formula.
+            // Use the allocated file size if the file size is bad. - Indexed files
+            // use different formula.
             filesize  = allocated_bytes_file_size;
-	    blocks    = allocated_block_file_size;
+            blocks    = allocated_block_file_size;
      } else {
        printf("vmsbackup - file sizing error - unexpected nblk = %lld and allocated_bytes_file_size = %lld\n",
-		       nblk, allocated_bytes_file_size );
+                       nblk, allocated_bytes_file_size );
        fflush (stdout);
        exit( 1 );
      }
@@ -1727,14 +1727,14 @@ process_file (unsigned char *buffer, unsigned short int rsize)
        }
 
        if (cflag) {
-	   // Use complete file name including the version number.
+           // Use complete file name including the version number.
           for (i = 0; i < strlen(cfname); i++) {
              sfilename[i]   = cfname[i];
              sfilename[i+1] = '\0';
           }
 
        } else {
-	   // Strip off the version number.
+           // Strip off the version number.
           for (i = 0;
                i < strlen(cfname) && cfname[i] != ';';
                i++) {
@@ -1913,11 +1913,11 @@ process_file (unsigned char *buffer, unsigned short int rsize)
 
 
        if ( fptr_out!= NULL && vflag) {
-    	  if (outfile)
-    		  printf("extracting: %s\n        to: %s\n",
-    				  filename, outfile);
-    	  else
-    		  printf("extracting: %s\n        to: %s\n",
+              if (outfile)
+                      printf("extracting: %s\n        to: %s\n",
+                                      filename, outfile);
+              else
+                      printf("extracting: %s\n        to: %s\n",
                  filename, unix_filename);
        }
 
@@ -1956,14 +1956,14 @@ process_vbn(unsigned char *buffer, unsigned short rsize)
 
        if (debugflags & D_VBN) {
             fprintf(stderr, "Variable-length record code: 0x0%x\n",
-		rec_type.rec_type_word.rectype_bits.rtype );
+                rec_type.rec_type_word.rectype_bits.rtype );
        }
 
         // Process the record type codes (FAB$B_RFM).
        switch (rec_type.rec_type_word.rectype_bits.rtype) {
 
-          case FAB_C_FIX: 	/* FAB$C_FIX - fixed-length record format.*/
-	     if (debugflags & D_VBN_X) {
+          case FAB_C_FIX:         /* FAB$C_FIX - fixed-length record format.*/
+             if (debugflags & D_VBN_X) {
                 fprintf(stderr, "Writing fixed-length records\n");
              }
 
@@ -1977,29 +1977,29 @@ process_vbn(unsigned char *buffer, unsigned short rsize)
              break;
 
           case FAB_C_VAR: /* FAB$C_VAR - variable-length record format. */
-	     if (debugflags & D_VBN_X) {
+             if (debugflags & D_VBN_X) {
                 fprintf(stderr, "Writing variable-length records\n");
              }
 
           case FAB_C_VFC: /* FAB$C_VFC - variable-length with fixed-length
                                          control record format. This format is
                                          not supported for indexed files.*/
-	     if (debugflags & D_VBN_X) {
+             if (debugflags & D_VBN_X) {
                 fprintf(stderr, "Writing VAR/VFC records\n");
              }
-	     	 if (needToSkipVFC) {
+                      if (needToSkipVFC) {
                  if (flag_binary) { // && rec_type.rec_type_word.rectype_bits.rtype == FAB_C_VFC is true otherwise needToSkipVFC would be false
-		         // If binary mode requested just write the data out.
+                         // If binary mode requested just write the data out.
                     for (j = 0; j < VFC_ctr_bytes; j++) {
                        fputc (buffer[i+j], fptr_out);
                     }
                  }
-	     		 needToSkipVFC = 0;
-	     		 i += VFC_ctr_bytes;
-	     		 reclen -= VFC_ctr_bytes;
-	     	 }
+                              needToSkipVFC = 0;
+                              i += VFC_ctr_bytes;
+                              reclen -= VFC_ctr_bytes;
+                      }
              if (reclen <= 0) {
-	         // Get the record length from the buffer.
+                 // Get the record length from the buffer.
                 reclen = getu16 (&buffer[i]);
 #ifdef NEWD
                 fprintf(lf, "---\n");
@@ -2009,7 +2009,7 @@ process_vbn(unsigned char *buffer, unsigned short rsize)
 #endif
                 fix = reclen;
 
-	         // If binary mode requested then just write the next two
+                 // If binary mode requested then just write the next two
                  //  bytes out.
                 if (flag_binary) {
                    for (j = 0; j < 2; j++) {
@@ -2020,30 +2020,30 @@ process_vbn(unsigned char *buffer, unsigned short rsize)
                 i += 2; // Skip over the next two bytes.
 
                 if (i >= rsize) {
-                	needToSkipVFC = 1;
-                	break;
+                        needToSkipVFC = 1;
+                        break;
                 }
 
                 if (rec_type.rec_type_word.rectype_bits.rtype == FAB_C_VFC) {
                    if (flag_binary) {
-		       // If binary mode requested just write the data out.
+                       // If binary mode requested just write the data out.
                       for (j = 0; j < VFC_ctr_bytes; j++) {
                          fputc (buffer[i+j], fptr_out);
                       }
                    }
 
-		    // Increment the buffer counter by the VFC record size.
+                    // Increment the buffer counter by the VFC record size.
                    i      += VFC_ctr_bytes;
 
-		    // Decrement the record length by the number of bytes 
+                    // Decrement the record length by the number of bytes 
                     //  already written.
                    reclen -= VFC_ctr_bytes;
                    if (i >= rsize)
-                	   break;
+                           break;
 
                 }
    
-	     } else if ((reclen == fix) && (recatt == FAB_M_FTN)) {
+             } else if ((reclen == fix) && (recatt == FAB_M_FTN)) {
      /****
                 if (buffer[i] == '0') {
                    fputc('\n', fptr_out);
@@ -2051,7 +2051,7 @@ process_vbn(unsigned char *buffer, unsigned short rsize)
                    fputc('\f', fptr_out);
                 }
      *** sow ***/
-	         // For fixed length fortran control just write the records
+                 // For fixed length fortran control just write the records
                  //  out.
                 fputc(buffer[i],fptr_out); /** sow **/
 
@@ -2059,7 +2059,7 @@ process_vbn(unsigned char *buffer, unsigned short rsize)
                 reclen--;
 
              } else {
-	        // If we know the record size just write the data out.
+                // If we know the record size just write the data out.
                 fputc(buffer[i], fptr_out);
 
                 i++;
@@ -2069,12 +2069,12 @@ process_vbn(unsigned char *buffer, unsigned short rsize)
              if (reclen == 0) {
 
                 if (!flag_binary) {
-		    // Add a CR to this nonbinary mode file.
+                    // Add a CR to this nonbinary mode file.
                    fputc('\n', fptr_out);    
                 }
 
                 if (i & 1) {
-		    // If binary mode requested always write out the current 
+                    // If binary mode requested always write out the current 
                     //  record.
                    if (flag_binary) {
                       fputc (buffer[i], fptr_out);
@@ -2089,13 +2089,13 @@ process_vbn(unsigned char *buffer, unsigned short rsize)
        case FAB_C_STM: /* FAB$C_STM - stream record format. Records are  
                                       delimited by FF, VT, LF or CR LF, and all
                                       leading zeros are ignored.*/
-	  if (debugflags & D_VBN_X) {
+          if (debugflags & D_VBN_X) {
              fprintf(stderr, "Writing STM records\n");
           }
 
        case FAB_C_STMLF: /* FAB$C_STMLF - stream sequential with linefeed; 
                                           used by C and Unix */
-	  if (debugflags & D_VBN_X) {
+          if (debugflags & D_VBN_X) {
              fprintf(stderr, "Writing STMLF records\n");
           }
 
@@ -2104,14 +2104,14 @@ process_vbn(unsigned char *buffer, unsigned short rsize)
           }
 
           if (reclen == 0) {
-	      // Assume 512 byte records.
+              // Assume 512 byte records.
              reclen = VMS_BLOCK;
           }
 
           c = buffer[i++];
           reclen--;
 
-	  // CR indicates at the end of the record.
+          // CR indicates at the end of the record.
           if (c == '\n') {
              reclen = 0;
           }
@@ -2123,14 +2123,14 @@ process_vbn(unsigned char *buffer, unsigned short rsize)
        case FAB_C_STMCR: /* FAB$C_STMCR - stream sequential with carriage 
                                           control */
 
-	  if (debugflags & D_VBN_X) {
+          if (debugflags & D_VBN_X) {
              fprintf(stderr, "Writing STMCR records\n");
           }
 
           c = buffer[i++];
 
           if (c == '\r' && !flag_binary) {
-	      // If binary mode not requested change CR to LF for Unix.
+              // If binary mode not requested change CR to LF for Unix.
              fputc('\n', fptr_out);
           } else {
              fputc(c, fptr_out);
@@ -2227,47 +2227,47 @@ process_block(unsigned char *block, int file_blocksize)
     if (debugflags & D_BLKREC) {
 #define STRINGIFY(m) #m
        unsigned short int bopsys, bsubsys;
-	   unsigned long bnumber;
+           unsigned long bnumber;
        char *copsys, *csubsys, *capplic;
        bnumber = getu32 (block_header->bbh_dol_l_number);
        fprintf(stderr, "\nblock header\n file offset   = 0x%lx\n size          = %d\n",
-    		   (bnumber-1)*bsize, (int) bsize);
+                       (bnumber-1)*bsize, (int) bsize);
        bopsys = getu16 (block_header->bbh_dol_w_opsys);
        switch (bopsys) {
-       case	BACKUP_K_OPSYS_VAX: copsys = &STRINGIFY(BACKUP_K_OPSYS_VAX)[15];
-    		   break;
-       case	BACKUP_K_OPSYS_ALPHA: copsys = &STRINGIFY(BACKUP_K_OPSYS_ALPHA)[15];
-    		   break;
-       case	BACKUP_K_OPSYS_IA64: copsys = &STRINGIFY(BACKUP_K_OPSYS_IA64)[15];
-    		   break;
+       case        BACKUP_K_OPSYS_VAX: copsys = &STRINGIFY(BACKUP_K_OPSYS_VAX)[15];
+                       break;
+       case        BACKUP_K_OPSYS_ALPHA: copsys = &STRINGIFY(BACKUP_K_OPSYS_ALPHA)[15];
+                       break;
+       case        BACKUP_K_OPSYS_IA64: copsys = &STRINGIFY(BACKUP_K_OPSYS_IA64)[15];
+                       break;
        default: copsys = "unknown";
-    		   break;
+                       break;
 
        }
        bsubsys = getu16 (block_header->bbh_dol_w_subsys);
        switch (bsubsys) {
-       case	BACKUP$K_BACKUP: csubsys = &STRINGIFY(BACKUP$K_BACKUP)[9];
-    		   break;
+       case        BACKUP$K_BACKUP: csubsys = &STRINGIFY(BACKUP$K_BACKUP)[9];
+                       break;
        default: csubsys = "unknown";
-    		   break;
+                       break;
 
        }
        switch (bapplic) {
-       case	BACKUP$K_DATABLOCK: capplic = &STRINGIFY(BACKUP$K_DATABLOCK)[9];
-    		   break;
-       case	BACKUP$K_XORBLOCK: capplic = &STRINGIFY(BACKUP$K_XORBLOCK)[9];
-    		   break;
+       case        BACKUP$K_DATABLOCK: capplic = &STRINGIFY(BACKUP$K_DATABLOCK)[9];
+                       break;
+       case        BACKUP$K_XORBLOCK: capplic = &STRINGIFY(BACKUP$K_XORBLOCK)[9];
+                       break;
        default: capplic = "unknown";
-    		   break;
+                       break;
 
        }
        fprintf(stderr, " opsys         = %d (%s)\n subsys        = %d (%s)\n applic        = %d (%s)\n",
-    		   bopsys, copsys, bsubsys, csubsys, bapplic, capplic);
+                       bopsys, copsys, bsubsys, csubsys, bapplic, capplic);
        fprintf(stderr, " number        = %ld\n", bnumber);
     }
     /* skip an XORBLOCK */
     if (bapplic==BACKUP$K_XORBLOCK)
-    	return;
+            return;
      /* Read the records. */
     while (buff_ptr < bsize) {
         /* Read the backup record header. */
@@ -2305,7 +2305,7 @@ process_block(unsigned char *block, int file_blocksize)
        switch (rtype) { /* Process each DOL record type. */
 
           case brh_dol_k_null:
-	     if (debugflags & D_BLKREC) {
+             if (debugflags & D_BLKREC) {
                 fprintf(stderr, "null\n");
              }
 
@@ -2313,7 +2313,7 @@ process_block(unsigned char *block, int file_blocksize)
              break;
 
           case brh_dol_k_summary:
-	     if (debugflags & D_BLKREC) {
+             if (debugflags & D_BLKREC) {
                 fprintf(stderr, "summary\n");
              }
 
@@ -2328,7 +2328,7 @@ process_block(unsigned char *block, int file_blocksize)
 
           case brh_dol_k_file:
                /* Process file attributes. */
-	     if (debugflags & D_BLKREC) {
+             if (debugflags & D_BLKREC) {
                 fprintf(stderr, "file\n");
              }
 
@@ -2336,7 +2336,7 @@ process_block(unsigned char *block, int file_blocksize)
              break;
 
           case brh_dol_k_vbn:
-	     if (debugflags & D_BLKREC) {
+             if (debugflags & D_BLKREC) {
                 fprintf(stderr, "vbn\n");
              }
 
@@ -2345,43 +2345,43 @@ process_block(unsigned char *block, int file_blocksize)
              break;
 
           case brh_dol_k_physvol:
-	     if (debugflags & D_BLKREC) {
+             if (debugflags & D_BLKREC) {
                 fprintf(stderr, "physvol\n");
              }
              break;
 
           case brh_dol_k_lbn:
-	     if (debugflags & D_BLKREC) {
+             if (debugflags & D_BLKREC) {
                 fprintf(stderr, "lbn\n");
              }
              break;
 
           case brh_dol_k_fid:
-	     if (debugflags & D_BLKREC) {
+             if (debugflags & D_BLKREC) {
                 fprintf(stderr, "fid\n");
              }
              break;
 
           case brh_dol_k_file_ext:
-	     if (debugflags & D_BLKREC) {
+             if (debugflags & D_BLKREC) {
                 fprintf(stderr, "file_ext (unsupported)\n");
              }
              break;
 
           case brh_dol_k_lbn_576:
-	     if (debugflags & D_BLKREC) {
+             if (debugflags & D_BLKREC) {
                 fprintf(stderr, "lbn_576 (unsupported)\n");
              }
              break;
 
           case brh_dol_k_rs_dirattr:
-	     if (debugflags & D_BLKREC) {
+             if (debugflags & D_BLKREC) {
                 fprintf(stderr, "rs_dirattr (unsupported)\n");
              }
              break;
 
           case brh_dol_k_alias:
-	     if (debugflags & D_BLKREC) {
+             if (debugflags & D_BLKREC) {
                 fprintf(stderr, "alias (unsupported)\n");
              }
              break;
@@ -2430,34 +2430,34 @@ mt_read(int fd, void *buf, size_t count)
     unsigned int beg_size, act_size, end_size;
 
     if ( ondisk == 2 ) {
-	if ( read(fd, sbuf, 4) != 4) {
-	    fprintf(stderr, "No data when reading block beginning size");
-	    return 0;
-	}
-	beg_size = getu32(sbuf);
-	if ( beg_size == 0 )	// tape mark
-	    return 0;
-    if (beg_size & 0xF0000000) {
-	    fprintf(stderr, "Unhandled TAP class number");
-	    return 0;
-	}
-
-	beg_size &= 0xFFFFFFF;
-	if (beg_size > count) {
-	    fprintf(stderr, "Trying to read too much data");
-	    return 0;
-	}
-	act_size = read(fd, buf, beg_size);
-	if ( read(fd, sbuf, 4) != 4) {
-	    fprintf(stderr, "No data when reading block end size");
-	    return 0;
-	}
-	end_size = getu32(sbuf) & 0xFFFFFFF;
-	if (( beg_size != act_size ) || ( beg_size != end_size )) {
-	    fprintf(stderr, "Sizes don't match");
+        if ( read(fd, sbuf, 4) != 4) {
+            fprintf(stderr, "No data when reading block beginning size");
             return 0;
-	}
-	return act_size;
+        }
+        beg_size = getu32(sbuf);
+        if ( beg_size == 0 )        // tape mark
+            return 0;
+    if (beg_size & 0xF0000000) {
+            fprintf(stderr, "Unhandled TAP class number");
+            return 0;
+        }
+
+        beg_size &= 0xFFFFFFF;
+        if (beg_size > count) {
+            fprintf(stderr, "Trying to read too much data");
+            return 0;
+        }
+        act_size = read(fd, buf, beg_size);
+        if ( read(fd, sbuf, 4) != 4) {
+            fprintf(stderr, "No data when reading block end size");
+            return 0;
+        }
+        end_size = getu32(sbuf) & 0xFFFFFFF;
+        if (( beg_size != act_size ) || ( beg_size != end_size )) {
+            fprintf(stderr, "Sizes don't match");
+            return 0;
+        }
+        return act_size;
     } else {
         return read(fd, buf, count);
     }
@@ -2496,7 +2496,7 @@ rdhead(unsigned char *block, int *rec_blocksize)
        label_count += 1;
 
        if (strncmp(label, "VOL1",4) == 0) {
-	  if (debugflags & D_IO) {
+          if (debugflags & D_IO) {
              fprintf (stderr, "\nFirst Volume Label:\n%s\n", label);
           }
 
@@ -2508,7 +2508,7 @@ rdhead(unsigned char *block, int *rec_blocksize)
        }
 
        if (strncmp(label, "HDR1",4) == 0) {
-	  if (debugflags & D_IO) {
+          if (debugflags & D_IO) {
              fprintf (stderr, "\nFirst Header Label: \n%s\n", label);
           }
 
@@ -2589,10 +2589,10 @@ rdtail()
           fprintf(stderr, 
                   "Snark: bad tail label record - Expected: %d bytes found: %d\n",
                   LABEL_SIZE, i);
-	  //          fflush (stdout);
+          //          fflush (stdout);
 
            // Exit on error.
-	  //          exit(1);
+          //          exit(1);
           return;
        }
 
@@ -2672,7 +2672,7 @@ vmsbackup()
        if (errno == EINVAL || errno == ENOTTY) {
           ondisk = 1;
 
-	  if ( debugflags & D_IO) {
+          if ( debugflags & D_IO) {
              fprintf(stderr, "Reading from disk\n");
           }
 
@@ -2680,7 +2680,7 @@ vmsbackup()
           fflush (stdout);
           perror(tapefile);
 
-	   // Exit on error.
+           // Exit on error.
           exit(1);
        }
     }
@@ -2731,7 +2731,7 @@ vmsbackup()
           i = ioctl(fd, MTIOCTOP, &op);
 
           if (i < 0) {
-	      // Error skipping first TM.
+              // Error skipping first TM.
              printf("Error skipping EOF - status:%d ", i);
              fflush (stdout);
 
@@ -2739,7 +2739,7 @@ vmsbackup()
 
               // Exit on error.
              exit(1);
-	  }
+          }
        }
     }
 #else
@@ -2759,12 +2759,12 @@ vmsbackup()
              fprintf(stderr, "-s not supported for disk savesets\n");
              fflush (stdout);
 
-	      // Exit on error.
+              // Exit on error.
              exit(1);
           }
 
 #if HAVE_MT_IOCTLS
-	  if (ondisk != 2) {
+          if (ondisk != 2) {
              op.mt_op    = MTFSF;
              op.mt_count = 1;
 
@@ -2775,10 +2775,10 @@ vmsbackup()
                 fflush (stdout);
                 perror(tapefile);
 
-	         // Exit on error.
+                 // Exit on error.
                 exit(1);
              }
-	  }
+          }
 #else
           abort ();
 #endif
@@ -2793,11 +2793,11 @@ vmsbackup()
 
        /* Retry read upto MAX_RETRYS before giving up. */
        if (i == -1) {
-	 for (n = 0; n < MAX_RETRYS; n++) {
+         for (n = 0; n < MAX_RETRYS; n++) {
              i = mt_read(fd, block, blocksize);
              if (i != -1) {
-	       n = MAX_RETRYS;
-	     }
+               n = MAX_RETRYS;
+             }
          }
        }
 
@@ -2808,16 +2808,16 @@ vmsbackup()
              eoffl = 1;
 
           } else {
-	     if (vflag || tflag) {
+             if (vflag || tflag) {
                 printf ("\nTotal of %u files, %lu blocks\n", nfiles, nblocks);
              }
 
-	      // Read the VMS tape label records.
+              // Read the VMS tape label records.
              rdtail();
 
-	     /* Read the VMS header records for the next save set and 
+             /* Read the VMS header records for the next save set and 
                  initialize the block buffer.
-	     */
+             */
              eoffl = rdhead(block, &blocksize);
           }
 
@@ -2842,7 +2842,7 @@ vmsbackup()
        } else {
           eoffl = 0;
 
-	   // Process a VMS backup block.
+           // Process a VMS backup block.
           process_block(block, blocksize);
 
        }  // Check the saveset block record.
@@ -2905,7 +2905,7 @@ static void debug_dump(const unsigned char* buffer, unsigned short int dsize,
           buffer++;
           comma = ',';
 
-	  cur_dump_dsize++;
+          cur_dump_dsize++;
           if (!(cur_dump_dsize & 0x07)) {
              fprintf(stderr, ",\n        ");
              comma = ' ';
