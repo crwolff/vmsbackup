@@ -2437,11 +2437,10 @@ mt_read(int fd, void *buf, size_t count)
         beg_size = getu32(sbuf);
         if ( beg_size == 0 )        // tape mark
             return 0;
-    if (beg_size & 0xF0000000) {
+        if (beg_size & 0xF0000000) {
             fprintf(stderr, "Unhandled TAP class number");
             return 0;
         }
-
         beg_size &= 0xFFFFFFF;
         if (beg_size > count) {
             fprintf(stderr, "Trying to read too much data");
@@ -2465,7 +2464,7 @@ mt_read(int fd, void *buf, size_t count)
 
 /* Read the VMS header records. */
 int
-rdhead(unsigned char *block, int *rec_blocksize)
+rdhead(unsigned char **block, int *rec_blocksize)
  {
     int i;
     int nfound         = 1;
@@ -2553,22 +2552,24 @@ rdhead(unsigned char *block, int *rec_blocksize)
 
     *rec_blocksize = max_rec_size;
 
-     // Release the initial block buffer memory.
-    if (sizeof (block) > 0) {
-       free (block);
+     // Don't reallocate block if no labels found
+    if (*rec_blocksize != 0) {
+        fprintf(stderr, "Reallocating %d\n", *rec_blocksize);
+         // Release the initial block buffer memory.
+        if (*block != NULL) {
+            free(*block);
+        }
+
+         /* Reallocate the block buffer using the header block size. */
+        *block = (unsigned char *) malloc(*rec_blocksize);
+        if (*block == (unsigned char *) 0) {
+           fprintf(stderr, "memory allocation for %d block failed\n",
+                   *rec_blocksize );
+
+            // Exit on error.
+           exit(1);
+        }
     }
-
-     /* Reallocate the block buffer using the header block size. */
-    block = (unsigned char *) malloc(*rec_blocksize);
-    if (block == (unsigned char *) 0) {
-       fprintf(stderr, "memory allocation for %d block failed\n", 
-               *rec_blocksize );
-       fflush (stdout);
-
-        // Exit on error.
-       exit(1);
-    }
-
     return(nfound);
  }
 
@@ -2703,7 +2704,6 @@ vmsbackup()
          the ondisk case? 
      */ 
     block = (unsigned char *) malloc (blocksize);
-
     if (block == (unsigned char *) 0) {
        fflush (stdout);
        fprintf(stderr, "vmsbackup - Memory allocation for block failed\n");
@@ -2720,7 +2720,7 @@ vmsbackup()
     } else {
 
         /* Read the VMS header records and intialize the block buffer.*/
-       eoffl = rdhead(block, &blocksize);
+       eoffl = rdhead(&block, &blocksize);
 
          /* Skip over the Tape Mark (TM) after the header records. */
        if ( ondisk != 2 ) {
@@ -2818,7 +2818,7 @@ vmsbackup()
              /* Read the VMS header records for the next save set and 
                  initialize the block buffer.
              */
-             eoffl = rdhead(block, &blocksize);
+             eoffl = rdhead(&block, &blocksize);
           }
 
        } else if (i == 3) {
