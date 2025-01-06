@@ -2188,7 +2188,6 @@ process_block(unsigned char *block, int file_blocksize)
     struct brhdef  *record_header;
     int            alloc_record_header_size = sizeof(*record_header);
 
-
      // Map the file data block into the backup block header struture. 
     block_header  = (struct bbhdef *) &block[buff_ptr];
 
@@ -2474,13 +2473,14 @@ rdhead(unsigned char *block, int *rec_blocksize)
     int max_block_size = 0;
     int label_count    = 0;
 
-    char label[LABEL_SIZE];
+    char label[LABEL_SIZE+1];
     char vol_name[80];
     char hdr1_name[80];
     char rec_format[1];
 
 
       /* Read the tape label - 4 records of 80 bytes. */
+    label[LABEL_SIZE] = 0;      // fix valgrind error
     while ((i = mt_read(fd, label, LABEL_SIZE)) != 0) {
 
        if (i != LABEL_SIZE) {
@@ -2596,6 +2596,7 @@ rdtail()
           return;
        }
 
+       name[0] = 0;     // Fixes valgrind error
        if (strncmp(label, "EOF1",4) == 0) {
           sscanf(label+4, "%14s", name);
           if (vflag || tflag) {
