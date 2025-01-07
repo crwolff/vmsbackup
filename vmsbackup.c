@@ -2711,7 +2711,6 @@ vmsbackup()
        exit(1);
     }
 
-#if HAVE_MT_IOCTLS
     if (ondisk == 1) {
 
        eoffl = 0;
@@ -2721,6 +2720,7 @@ vmsbackup()
         /* Read the VMS header records and intialize the block buffer.*/
        eoffl = rdhead(&block, &blocksize);
 
+#if HAVE_MT_IOCTLS
          /* Skip over the Tape Mark (TM) after the header records. */
        if ( ondisk != 2 ) {
           op.mt_op    = MTFSF;
@@ -2740,10 +2740,8 @@ vmsbackup()
              exit(1);
           }
        }
-    }
-#else
-    eoffl = 0;
 #endif
+    }
 
     nfiles  = 0;
     nblocks = 0;
