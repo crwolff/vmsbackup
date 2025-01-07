@@ -2647,7 +2647,11 @@ vmsbackup()
     if (0==strcmp(tapefile,"-"))
        fd = dup(STDIN_FILENO);
     else
+#ifdef __WIN32__
+       fd = open(tapefile, O_RDONLY|O_BINARY);
+#else
        fd = open(tapefile, O_RDONLY);
+#endif
     if (fd < 0) {
        printf ("Error accessing tape drive: ");
        fflush (stdout);

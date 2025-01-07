@@ -25,7 +25,7 @@ SHELL = /bin/sh
 # also change the version over in build.com
 #
 
-CURRVER = 4.8.1
+CURRVER = 4.8.2
 
 ##########
 HAVE_REMOTE =
